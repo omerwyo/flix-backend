@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'flix-be'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C9FA7D2A60346C5AA6AD52F185CC926 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1A6514E96BFF4F41980CF30F44657E4C }}
           package: .
