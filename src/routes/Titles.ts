@@ -18,7 +18,7 @@ const router = Router();
         .createQueryBuilder("title")
         .select('title.release_year')
         .addSelect('AVG(title.runtime)', 'averageRuntime')
-        .where('title.release_year between :start_year and :end_year', {start_year: req.body.start_year, end_year: req.body.end_year})
+        .where('title.release_year between :start_year and :end_year', {start_year: Number(req.query.start_year), end_year: Number(req.query.end_year)})
         .groupBy("title.release_year")
         .orderBy('title.release_year', 'ASC')
         .getRawMany();
