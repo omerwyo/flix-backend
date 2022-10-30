@@ -33,7 +33,7 @@ jobs:
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
-          app-name: '100daysofflutter'
+          app-name: 'flix-be'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_533CE09512F9462AB2AADE192DB8C1CD }}
           package: .
