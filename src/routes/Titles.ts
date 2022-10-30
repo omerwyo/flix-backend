@@ -33,7 +33,6 @@ const router = Router();
  ******************************************************************************/
 
  router.get('/proportion', async (req: Request, res: Response) => {
-    console.log(req.query.release_year)
     const occurrences = await AppDataSource
         .getRepository(Title)
         .createQueryBuilder("title")
@@ -54,11 +53,33 @@ const router = Router();
 });
 
 /******************************************************************************
+ *      Get occurrence of AGE_CERTIFICATION for a given genre - "GET /api/titles/age"
+ *      Returns the following
+ *      Returns a key value pair array of age_certification: occurrences to be used in line chart
+ *      Request body contains genre string
+ ******************************************************************************/
+
+ router.get('/age', async (req: Request, res: Response) => {
+    var lowerCaseGenre = String(req.query.genre).toLowerCase()
+    const ages = await AppDataSource
+        .getRepository(Title)
+        .createQueryBuilder("title")
+        .select('title.age_certification')
+        .addSelect('COUNT(title.age_certification)', 'occurrences')
+        .where("title.genres like :genre", { genre:`%${lowerCaseGenre}%` })
+        .andWhere("title.age_certification is not null")
+        .groupBy("title.age_certification")
+        .orderBy('title.age_certification', 'ASC')
+        .getRawMany();
+
+    return res.status(OK).json({ages});
+});
+
+/******************************************************************************
  *                      Get All Titles - "GET /api/titles/all"
  ******************************************************************************/
 
 router.get('/all', async (req: Request, res: Response) => {
-    console.log('reached')
     const titles = await AppDataSource
         .getRepository(Title)
         .createQueryBuilder("title")
