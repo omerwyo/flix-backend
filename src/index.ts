@@ -1,4 +1,5 @@
-import './LoadEnv'; // Must be the first import
+import dotenv from 'dotenv';
+dotenv.config()
 import app from './Server';
 import logger from './shared/Logger';
 import { DataSource } from "typeorm";
