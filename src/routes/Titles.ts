@@ -22,6 +22,7 @@ const router = Router();
         .groupBy("title.release_year")
         .orderBy('title.release_year', 'ASC')
         .getRawMany();
+    res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json({titles});
 });
 
@@ -49,6 +50,7 @@ const router = Router();
 
     const toRet = {movie_percent: Math.round(movie_percent * 10) / 10, 
                    show_percent: Math.round(show_percent* 10) / 10}
+    res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json(toRet);
 });
 
@@ -61,6 +63,8 @@ const router = Router();
 
  router.get('/age', async (req: Request, res: Response) => {
     var lowerCaseGenre = String(req.query.genre).toLowerCase()
+    const CertNumMapping = {"TV-Y7": 0, "G": 1, "NC-17": 2, "TV-Y": 3, "PG": 4, "TV-G": 5, "TV-PG": 6, "TV-14": 7, "PG-13": 8, "R": 9, "TV-MA": 10};
+    const foundKeys = new Set<string>();
     const ages = await AppDataSource
         .getRepository(Title)
         .createQueryBuilder("title")
@@ -71,7 +75,13 @@ const router = Router();
         .groupBy("title.age_certification")
         .orderBy('title.age_certification', 'ASC')
         .getRawMany();
-
+        for(let i=0; i<ages.length; i++){foundKeys.add(ages[i].title_age_certification);}
+        for (let key in CertNumMapping){
+            if (!foundKeys.has(key)){
+                ages.push({'title_age_certification': key, 'occurrences': "0"})
+            }
+        }
+    res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json({ages});
 });
 
@@ -84,6 +94,7 @@ router.get('/all', async (req: Request, res: Response) => {
         .getRepository(Title)
         .createQueryBuilder("title")
         .getMany();
+    res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json({titles});
 });
 
@@ -104,6 +115,7 @@ router.get('/:id', async (req: Request, res: Response) => {
         res.end();
         return;
     }
+    res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json({title});
 });
 
