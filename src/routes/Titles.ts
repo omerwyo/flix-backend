@@ -81,6 +81,13 @@ const router = Router();
                 ages.push({'title_age_certification': key, 'occurrences': "0"})
             }
         }
+        ages.sort(function(a, b) {
+            var keyA = new String(a.title_age_certification),
+              keyB = new String(b.title_age_certification);
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+          });
     res.set('Access-Control-Allow-Origin', 'https://flix-omerwyo.azurewebsites.net');
     return res.status(OK).json({ages});
 });
